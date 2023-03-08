@@ -29,16 +29,21 @@ app.use(express.json())
     object as arguments, and calls send() on the response to return the string "Hello World!"
  */
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+  res.send('Hello World!');
 });
 
 app.get('/message', (req, res) => {
-    res.json({message: 'Hello from server!'})
+  res.json({message: 'Hello from server!'})
+})
+
+app.post('/message', (req, res) => {
+  console.log(req.body)
+  res.json({message: 'Hello from server!'})
 })
 
 /*
     Start the server on the specified port and logs the comment to the console.
  */
 app.listen(PORT, HOST, () => {
-    console.log(`Running on http://${HOST}:${PORT}`);
+  console.log(`Running on http://${HOST}:${PORT}`);
 });

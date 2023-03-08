@@ -1,20 +1,47 @@
-import {useEffect, useState} from 'react'
-import reactLogo from './assets/react.svg'
+import {ChangeEvent, useEffect, useState} from 'react'
 import './App.css'
+import {Box, Button, Heading, Textarea} from "@chakra-ui/react";
+import {PostRequest} from "./utils/request-wrappers";
 
-function App() {
+function App(): JSX.Element {
 	const [count, setCount] = useState(0)
-    const [message, setMessage] = useState('')
+	const [message, setMessage] = useState('')
+	const [text, setText] = useState('')
 
-    useEffect(() => {
-        fetch('http://localhost:8080/message')
-            .then(res => res.json())
-            .then(data => setMessage(data.message))
-    }, [])
+	let handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+		let textValue = e.target.value
+		setText(textValue)
+	}
+
+	const postText = async () => {
+		const response = await PostRequest('message', {message: text})
+		return response
+	}
+
+	let submitText = () => {
+		console.log(text)
+		let responseText = postText()
+	}
+
+	useEffect(() => {
+		fetch('http://localhost:8080/message')
+			.then(res => res.json())
+			.then(data => setMessage(data.message))
+	}, [])
+
+	let textInput = (
+		<Textarea size='lg' placeholder="Enter text here" value={text} onChange={handleTextChange}/>
+	)
+
+	let submitButton = (
+		<Button onClick={submitText}>Submit</Button>
+	)
 
 	return (
-		<div className="App">
-            <h1>{message}</h1>
+		<Box className="App">
+			<Heading>{message}</Heading>
+			{textInput}
+			{submitButton}
 			{/*<div>*/}
 			{/*	<a href="https://vitejs.dev" target="_blank">*/}
 			{/*		<img src="/vite.svg" className="logo" alt="Vite logo"/>*/}
@@ -35,7 +62,7 @@ function App() {
 			{/*<p className="read-the-docs">*/}
 			{/*	Click on the Vite and React logos to learn more*/}
 			{/*</p>*/}
-		</div>
+		</Box>
 	)
 }
 
