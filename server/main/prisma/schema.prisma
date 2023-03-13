@@ -14,7 +14,16 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  name  String
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  email     String     @unique
+  name      String
+  documents Document[]
+}
+
+model Document {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  content  String
+  authorId String @db.ObjectId
+  author   User   @relation(fields: [authorId], references: [id])
 }
