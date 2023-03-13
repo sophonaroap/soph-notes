@@ -1,7 +1,18 @@
-version: "2"
+version: "3.1"
 services:
+  mongo:
+    build: ./mongodb_rs
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: 27017
+      MONGO_INITDB_DATABASE: mongo
   node:
-    image: "markdown-editor"
+    image: "soph-notes"
     build:
       context: .
     environment:

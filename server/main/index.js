@@ -37,35 +37,35 @@ app.get('/message', (req, res) => {
 })
 
 app.post('/message', (req, res) => {
-  const {MongoClient} = require("mongodb");
-
-// Replace the following with your Atlas connection string
-  const url = process.env.DATABASE_URL
-  const client = new MongoClient(url);
-
-// The database to use
-  const dbName = "test";
-
-  async function saveMessageToDb() {
-    try {
-      await client.connect()
-      console.log("Connected correctly to server");
-      const db = client.db(dbName);
-
-      const collection = db.collection("messages")
-      const message = req.body
-
-      const promise = await collection.insertOne(message)
-      const myDoc = await collection.findOne()
-      console.log(myDoc)
-    } catch (e) {
-      console.error(e.stack)
-    } finally {
-      await client.close()
-    }
-  }
-
-  saveMessageToDb().catch(console.dir)
+//   const {MongoClient} = require("mongodb");
+//
+// // Replace the following with your Atlas connection string
+//   const url = process.env.DATABASE_URL
+//   const client = new MongoClient(url);
+//
+// // The database to use
+//   const dbName = "test";
+//
+//   async function saveMessageToDb() {
+//     try {
+//       await client.connect()
+//       console.log("Connected correctly to server");
+//       const db = client.db(dbName);
+//
+//       const collection = db.collection("messages")
+//       const message = req.body
+//
+//       const promise = await collection.insertOne(message)
+//       const myDoc = await collection.findOne()
+//       console.log(myDoc)
+//     } catch (e) {
+//       console.error(e.stack)
+//     } finally {
+//       await client.close()
+//     }
+//   }
+//
+//   saveMessageToDb().catch(console.dir)
 })
 
 /*

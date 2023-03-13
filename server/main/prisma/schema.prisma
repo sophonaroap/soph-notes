@@ -1,3 +1,9 @@
+// You can now start using Prisma Client in your code. Reference: https://pris.ly/d/client
+// ```
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
+// ```
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,15 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  title  String
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-}
-
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String
-  posts Post[]
+  email String @unique
+  name  String
 }
