@@ -1,11 +1,11 @@
 'use strict';
 
 // Import the express and cors modules
-const express = require('express');
-const cors = require('cors');
+const express = require('express')
+const cors = require('cors')
 
-const PORT = 8080;
-const HOST = '0.0.0.0';
+const PORT = process.env.PORT || 8080
+const HOST = process.env.HOST || '0.0.0.0'
 
 // Create an express app
 /*
@@ -37,8 +37,35 @@ app.get('/message', (req, res) => {
 })
 
 app.post('/message', (req, res) => {
-  console.log(req.body)
-  res.json({message: 'Hello from server!'})
+  const {MongoClient} = require("mongodb");
+
+// Replace the following with your Atlas connection string
+  const url = process.env.DATABASE_URL
+  const client = new MongoClient(url);
+
+// The database to use
+  const dbName = "test";
+
+  async function saveMessageToDb() {
+    try {
+      await client.connect()
+      console.log("Connected correctly to server");
+      const db = client.db(dbName);
+
+      const collection = db.collection("messages")
+      const message = req.body
+
+      const promise = await collection.insertOne(message)
+      const myDoc = await collection.findOne()
+      console.log(myDoc)
+    } catch (e) {
+      console.error(e.stack)
+    } finally {
+      await client.close()
+    }
+  }
+
+  saveMessageToDb().catch(console.dir)
 })
 
 /*
