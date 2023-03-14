@@ -54,8 +54,28 @@ npm run dev
 
 # Commands
 
+## Mongo
+
+Show databases
+```shell
+show dbs
+```
+
+List collections (tables)
+```shell
+show collections
+```
+
 Enter db shell:
 ```shell
-docker-compose exec mongo mongosh -u user -p pass
+docker-compose exec mongo mongosh -u root -p prisma
+```
+
+## Prisma
+
+You need to re-run the prisma generate command after every change that's made to your Prisma schema to update the generated Prisma Client code:
+```shell
+npx prisma generate
+npx prisma db push
 ```
 
