@@ -1,6 +1,6 @@
 import {Prisma, PrismaClient} from "@prisma/client";
 
-export async function init_dev_mongo() {
+export async function init_author_mongo() {
 	console.log('Initializing dev mongo');
 
 	const prisma_client = new PrismaClient()
