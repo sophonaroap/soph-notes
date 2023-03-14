@@ -1,12 +1,16 @@
-import {ChangeEvent, useEffect, useState} from 'react'
+import {ChangeEvent, useState} from 'react'
 import './App.css'
-import {Box, Button, Heading, Textarea} from "@chakra-ui/react";
+import {Box, Button, Input, Textarea} from "@chakra-ui/react";
 import {PostRequest} from "./utils/request-wrappers";
 
 function App(): JSX.Element {
-	const [count, setCount] = useState(0)
-	const [message, setMessage] = useState('')
+	const [title, setTitle] = useState('Untitled')
 	const [text, setText] = useState('')
+
+	let handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		let titleValue = e.target.value
+		setTitle(titleValue)
+	}
 
 	let handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		let textValue = e.target.value
@@ -19,15 +23,14 @@ function App(): JSX.Element {
 	}
 
 	let submitText = () => {
-		console.log(text)
+		console.log('title: ', title)
+		console.log('text: ', text)
 		let responseText = postText()
 	}
 
-	useEffect(() => {
-		fetch('http://localhost:8080/message')
-			.then(res => res.json())
-			.then(data => setMessage(data.message))
-	}, [])
+	let titleInput = (
+		<Input placeholder='Untitled' value={title} onChange={handleTitleChange}/>
+	)
 
 	let textInput = (
 		<Textarea size='lg' placeholder="Enter text here" value={text} onChange={handleTextChange}/>
@@ -39,29 +42,9 @@ function App(): JSX.Element {
 
 	return (
 		<Box className="App">
-			<Heading>{message}</Heading>
+			{titleInput}
 			{textInput}
 			{submitButton}
-			{/*<div>*/}
-			{/*	<a href="https://vitejs.dev" target="_blank">*/}
-			{/*		<img src="/vite.svg" className="logo" alt="Vite logo"/>*/}
-			{/*	</a>*/}
-			{/*	<a href="https://reactjs.org" target="_blank">*/}
-			{/*		<img src={reactLogo} className="logo react" alt="React logo"/>*/}
-			{/*	</a>*/}
-			{/*</div>*/}
-			{/*<h1>Vite + React</h1>*/}
-			{/*<div className="card">*/}
-			{/*	<button onClick={() => setCount((count) => count + 1)}>*/}
-			{/*		count is {count}*/}
-			{/*	</button>*/}
-			{/*	<p>*/}
-			{/*		Edit <code>src/App.tsx</code> and save to test HMR*/}
-			{/*	</p>*/}
-			{/*</div>*/}
-			{/*<p className="read-the-docs">*/}
-			{/*	Click on the Vite and React logos to learn more*/}
-			{/*</p>*/}
 		</Box>
 	)
 }
