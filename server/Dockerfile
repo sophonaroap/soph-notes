@@ -17,4 +17,4 @@ RUN ls
 COPY . .
 
 EXPOSE 8080
-CMD [ "node", "main/index.js" ]
+CMD [ "node", "main/index.ts" ]
