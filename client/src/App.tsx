@@ -1,25 +1,47 @@
 import {ChangeEvent, useState} from 'react'
 import './App.css'
 import {Box, Button, Input, Textarea} from "@chakra-ui/react";
-import {PostRequest} from "./utils/request-wrappers";
+import {PostDocument} from "./api/document";
+import {TDocument} from "./types/main";
+
+const test_author = {
+	email: 'test_email@email.com',
+	name: 'Test Name'
+}
 
 function App(): JSX.Element {
 	const [title, setTitle] = useState('Untitled')
 	const [text, setText] = useState('')
+	const [document, setDocument] = useState<TDocument>()
 
-	let handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		let titleValue = e.target.value
 		setTitle(titleValue)
 	}
 
-	let handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+	const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		let textValue = e.target.value
 		setText(textValue)
 	}
 
+	const buildDocument = () => {
+		const author_id = document ? document.author_id ? document.author_id : undefined : undefined
+		const author = document ? document.author ? document.author : test_author : test_author
+		const document_data: TDocument = {
+			id: document ? document.id : undefined,
+			title: title,
+			content: text,
+			author_id: author_id,
+			author: author
+		}
+		setDocument(document_data)
+	}
+
 	const postText = async () => {
-		const response = await PostRequest('message', {message: text})
-		return response
+		buildDocument()
+		const response = await PostDocument(document!)
+		console.log('response: ', response)
+		console.log(response)
 	}
 
 	let submitText = () => {

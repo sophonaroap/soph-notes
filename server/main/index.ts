@@ -1,8 +1,12 @@
 'use strict';
 
+require('dotenv').config()
+
 // Import the express and cors modules
 import express, {Express, Request, Response} from 'express';
 import cors from 'cors';
+import {prisma} from "./prisma/prisma-client";
+import {Document, Prisma} from "@prisma/client";
 
 // This fixes a typescript error, since process.env.PORT can 'possibly' be a string
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
@@ -37,8 +41,41 @@ app.get('/message', (req: Request, res: Response) => {
   res.json({message: 'Hello from server!'})
 })
 
-app.post('/message', (req: Request, res: Response) => {
-  console.log('Message received: ', req.body.message)
+app.post('/document', async (req: Request, res: Response) => {
+  console.log('Document received')
+  console.log('Document: ', req.body.document)
+  
+
+  let document_id = req.body.document.id
+  let document: Document
+
+  if (document_id) {
+    console.log('Document ID: ', document_id)
+
+    let update_data: Prisma.DocumentUpdateInput = {
+      content: req.body.document.content,
+    }
+
+    document = await prisma.document.update({
+      where: {id: document_id},
+      data: update_data,
+    })
+  }
+  else {
+    let create_data: Prisma.DocumentCreateInput = {
+      content: req.body.document.content,
+      title: req.body.document.title,
+      author: {
+        connect: {email: req.body.document.author.email}
+      }
+    }
+
+    document = await prisma.document.create({
+      data: create_data,
+    })
+  }
+
+  res.json({document: JSON.stringify(document)})
 })
 
 /*

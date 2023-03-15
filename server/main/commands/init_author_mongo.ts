@@ -1,6 +1,6 @@
 import {Prisma, PrismaClient} from "@prisma/client";
 
-export async function init_author_mongo() {
+async function init_author_mongo() {
 	console.log('Initializing dev mongo');
 
 	const prisma_client = new PrismaClient()
@@ -21,3 +21,5 @@ export async function init_author_mongo() {
 
 	console.log('Updated or created initial user: ' + returnedInitialUser)
 }
+
+init_author_mongo()
