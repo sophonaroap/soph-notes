@@ -1,3 +1,6 @@
+prisma_db_init:
+	cd server ; docker-compose run --rm backend bash -c "npx prisma generate && npx prisma db push"
+
 prisma_db_build:
 	cd server ; docker-compose run --rm backend npx ts-node main/commands/init_author_mongo.ts
 

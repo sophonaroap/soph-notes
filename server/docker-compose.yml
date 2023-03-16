@@ -23,6 +23,7 @@ services:
     image: "soph-notes"
     depends_on:
       - cache
+      - db
     build:
       context: .
     environment:

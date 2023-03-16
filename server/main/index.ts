@@ -1,15 +1,17 @@
 'use strict';
 
+import express, {Express, Request, Response} from 'express'
+import cors from 'cors'
+import {prisma} from "./prisma/prisma-client"
+import {Document, Prisma} from "@prisma/client"
+import RedisStore from 'connect-redis'
+import {createClient} from 'redis'
+import session from "express-session";
+
 require('dotenv').config()
 
-// Import the express and cors modules
-import express, {Express, Request, Response} from 'express';
-import cors from 'cors';
-import {prisma} from "./prisma/prisma-client";
-import {Document, Prisma} from "@prisma/client";
-
 // This fixes a typescript error, since process.env.PORT can 'possibly' be a string
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
+const PORT = process.env.PORT || 8080
 const HOST = process.env.HOST || '0.0.0.0'
 
 // Create an express app
@@ -27,6 +29,35 @@ app.use(cors());
     This method is used to parse the incoming requests with JSON payloads and is based upon the bodyparser.
  */
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+
+
+const redisClient = createClient({
+  socket: {
+    host: process.env.REDIS_HOST,
+  }
+})
+redisClient.connect().catch((err) => {
+  console.error(err)
+})
+
+const redisStore = new RedisStore({
+  client: redisClient,
+  prefix: 'sess:',
+})
+
+app.use(
+  session({
+    store: redisStore,
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    }
+  })
+)
 
 /*
     A route definition. The app.get() method specifies a callback function that will be invoked whenever there is an
@@ -38,13 +69,13 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/message', (req: Request, res: Response) => {
-  res.json({message: 'Hello from server!'})
+  res.json({message: 'Hello from server!', success: true})
 })
 
 app.post('/document', async (req: Request, res: Response) => {
   console.log('Document received')
   console.log('Document: ', req.body.document)
-  
+
 
   let document_id = req.body.document.id
   let document: Document
