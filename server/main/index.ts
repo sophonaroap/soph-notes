@@ -1,5 +1,6 @@
 'use strict';
 
+import * as dotenv from 'dotenv'
 import express, {Express, Request, Response} from 'express'
 import cors from 'cors'
 import {prisma} from "./prisma/prisma-client"
@@ -8,10 +9,10 @@ import RedisStore from 'connect-redis'
 import {createClient} from 'redis'
 import session from "express-session";
 
-require('dotenv').config()
+dotenv.config()
 
 // This fixes a typescript error, since process.env.PORT can 'possibly' be a string
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
 const HOST = process.env.HOST || '0.0.0.0'
 
 // Create an express app
@@ -51,7 +52,7 @@ app.use(
     store: redisStore,
     resave: false,
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
