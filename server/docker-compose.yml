@@ -1,25 +1,39 @@
 version: "3.1"
 services:
   # Replica Set (required for Prisma Client)
-  mongo:
+  db:
     build: ./mongodb_rs
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: prisma
       MONGO_INITDB_DATABASE: mongo
-      MONGO_REPLICA_HOST: mongo
+      MONGO_REPLICA_HOST: db
       MONGO_REPLICA_PORT: 27017
     ports:
       - '27017:27017'
-
-  node:
+  cache:
+    image: redis:7.0.9
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis-data:/data
+  backend:
     image: "soph-notes"
+    depends_on:
+      - cache
     build:
       context: .
     environment:
       - NODE_ENV=development
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
     volumes:
       - ./:/usr/src/app
     ports:
       - "8080:8080"
     command: "npm run dev"
+
+volumes:
+    redis-data:
