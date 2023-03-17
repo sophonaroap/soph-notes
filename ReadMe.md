@@ -1,25 +1,33 @@
 A Markdown text editor with live generation
 
-Utilizes the following technologies:
-Backend:
-- [Prisma](https://www.prisma.io/)
-- [MongoDB](https://www.mongodb.com/)
-- [Docker](https://www.docker.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Redis](https://redis.io/)
-- [Node.js](https://nodejs.org/en/)
-- [Express](https://expressjs.com/)
+Utilizes the following technologies (because why not do them all):
 
-Frontend:
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
+### Backend:
+- DB
+  - [Prisma](https://www.prisma.io/)
+  - [MongoDB](https://www.mongodb.com/)
+- Language
+  - [TypeScript](https://www.typescriptlang.org/)
+- Language Framework
+  - [Node.js](https://nodejs.org/en/)
+  - [Express](https://expressjs.com/)
+- Session Management
+  - [Redis](https://redis.io/)
+  - [Express Session](https://www.npmjs.com/package/express-session)
+  - [Connect Redis](https://www.npmjs.com/package/connect-redis)
+- Run Configuration
+  - [Docker](https://www.docker.com/)
+  - [Docker Compose](https://docs.docker.com/compose/)
 
-To run docker:
-https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+### Frontend
+  - [React](https://reactjs.org/)
+  - [TypeScript](https://www.typescriptlang.org/)
 
 # Setup and Run
 
 ## Server
+
+### Manually
 Go to server directory:
 ```shell
 cd server
@@ -41,31 +49,55 @@ Start server:
 docker-compose up
 ```
 
-Setup database:
+### Using Makefile
+
+#### Scratch
 ```shell
-npx prisma db push
+make build_server
+make prisma_db_init
+make run_server
+```
+
+Optionally, add a single Author
+```shell
+make prisma_db_seed
+```
+
+#### Auto
+```shell
+make init_server_scratch
+```
+
+OR, init with a single Author
+```shell
+make init_server_scratch_with_author
 ```
 
 ### Run
 Start server:
 ```shell
-docker-compose up
-```
-
-## Client
-Go to client directory:
-```shell
-cd client
-```
-
-Install dependencies:
-```shell
-npm install
+make run_server
 ```
 
 Start client:
 ```shell
 npm run dev
+```
+
+### Build & Run
+Build and start server:
+```shell
+make run_server_scratch
+```
+
+Build and start server with a single Author:
+```shell
+make run_server_scratch_with_author
+```
+
+Start client:
+```shell    
+make run_client
 ```
 
 # Commands
@@ -96,6 +128,13 @@ docker-compose exec backend npx prisma generate
 docker-compose exec backend npx prisma db push
 ```
 
+Or, using the Makefile:
+```shell
+prisma_db_init
+```
+
+### References
+
 [Prisma Model Queries](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#model-queries)
 
 [Prisma Model Type Definitions](https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#type-definitions)
@@ -109,7 +148,7 @@ Models are imported directly from @prisma/client
 import { User } from '@prisma/client'
 ```
 
-Generated types are imported from @primsa/client/Prisma:
+Generated types are imported from @prisma/client/Prisma:
 ```typescript
 import { Prisma } from '@prisma/client'
 
