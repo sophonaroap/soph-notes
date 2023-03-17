@@ -1,3 +1,19 @@
+A markdown text editor with live generation
+
+Utilizes the following technologies:
+Backend:
+- [Prisma](https://www.prisma.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Docker](https://www.docker.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Redis](https://redis.io/)
+- [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+
+Frontend:
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+
 To run docker:
 https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 
