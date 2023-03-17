@@ -1,14 +1,17 @@
 prisma_db_init:
-	cd server ; docker-compose run --rm backend bash -c "npx prisma generate && npx prisma db push"
+	cd server ; docker compose run --rm backend bash -c "npx prisma generate && npx prisma db push"
 
 prisma_db_build:
-	cd server ; docker-compose run --rm backend npx ts-node main/commands/init_author_mongo.ts
+	cd server ; docker compose run --rm backend npx ts-node main/commands/init_author_mongo.ts
 
 mongo_shell:
-	cd server ; docker-compose exec db mongosh -u root -p prisma
+	cd server ; docker compose exec db mongosh -u root -p prisma
 
 run_server:
-	cd server ; docker-compose up
+	cd server ; docker compose up -d; docker compose logs -f backend cache
 
 run_client:
 	cd client ; npm run dev
+
+show_redis:
+	cd server ; docker compose exec cache redis-cli KEYS \*

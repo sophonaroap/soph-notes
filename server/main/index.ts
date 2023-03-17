@@ -2,18 +2,31 @@
 
 import * as dotenv from 'dotenv'
 import express, {Express, Request, Response} from 'express'
-import cors from 'cors'
 import {prisma} from "./prisma/prisma-client"
 import {Document, Prisma} from "@prisma/client"
 import RedisStore from 'connect-redis'
 import {createClient} from 'redis'
 import session from "express-session";
+import cors from 'cors';
 
 dotenv.config()
 
 // This fixes a typescript error, since process.env.PORT can 'possibly' be a string
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
 const HOST = process.env.HOST || '0.0.0.0'
+
+const redisClient = createClient({
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT as string),
+  }
+})
+redisClient.connect().catch(console.error)
+
+const redisStore = new RedisStore({
+  client: redisClient,
+  prefix: 'sess:',
+})
 
 // Create an express app
 /*
@@ -22,39 +35,22 @@ const HOST = process.env.HOST || '0.0.0.0'
     application behaves (e.g. the environment mode, whether route definitions are case-sensitive, etc.)
  */
 const app: Express = express();
-app.use(cors());
 
-// Calling the express.json() method for parsing
-/*
-    express.json() is a built-in middleware function in Express.
-    This method is used to parse the incoming requests with JSON payloads and is based upon the bodyparser.
- */
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-
-const redisClient = createClient({
-  socket: {
-    host: process.env.REDIS_HOST,
-  }
-})
-redisClient.connect().catch((err) => {
-  console.error(err)
-})
-
-const redisStore = new RedisStore({
-  client: redisClient,
-  prefix: 'sess:',
-})
-
 app.use(
   session({
+    name: 'sid',
     store: redisStore,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: process.env.SESSION_SECRET as string,
     cookie: {
-      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+      httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     }
   })
@@ -70,6 +66,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/message', (req: Request, res: Response) => {
+  console.log(req.session)
   res.json({message: 'Hello from server!', success: true})
 })
 
