@@ -1,4 +1,4 @@
-A markdown text editor with live generation
+A Markdown text editor with live generation
 
 Utilizes the following technologies:
 Backend:
