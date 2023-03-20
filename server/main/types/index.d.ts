@@ -1,6 +1,10 @@
+import "express-session"
+import {Author} from "@prisma/client";
+
 declare module "express-session" {
-	interface SessionData {
-		[key: string]: any
+	export interface SessionData {
+		message: string,
+		author: Author
 	}
 }
 

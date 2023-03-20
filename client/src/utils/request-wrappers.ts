@@ -51,6 +51,7 @@ export async function PatchRequest(url: string, body: object | null = null): Pro
 	return await fetch(qualifiedUrl, {
 		method: 'PATCH',
 		headers: {'Content-Type': 'application/json'},
+		credentials: 'same-origin',
 		body: JSON.stringify(body)
 	})
 		.then((response) => {
@@ -74,6 +75,7 @@ export async function PostRequest(url: string, body: object | null = null): Prom
 	return await fetch(qualifiedUrl, {
 		method: 'POST',
 		headers: {'Content-Type': 'application/json'},
+		credentials: 'same-origin',
 		body: JSON.stringify(body)
 	})
 		.then((response) => {

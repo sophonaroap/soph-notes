@@ -1,7 +1,7 @@
 'use strict';
 
 import * as dotenv from 'dotenv'
-import express, {Express, Request, Response} from 'express'
+import express, {Express, NextFunction, Request, Response} from 'express'
 import {prisma} from "./prisma/prisma-client"
 import {Document, Prisma} from "@prisma/client"
 import RedisStore from 'connect-redis'
@@ -36,25 +36,38 @@ const redisStore = new RedisStore({
  */
 const app: Express = express();
 
-app.use(cors())
+app.use(cors({
+  credentials: true,
+}))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.use(
   session({
-    name: 'sid',
     store: redisStore,
     resave: false,
     saveUninitialized: true,
     secret: process.env.SESSION_SECRET as string,
     cookie: {
-      sameSite: "lax",
       secure: false,
-      httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     }
   })
 )
+
+// Middleware to see if a user is authenticated
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  if (req.session?.author) {
+    next()
+  }
+  else {
+    next('route')
+  }
+}
+
+app.get('/', isAuthenticated, (req: Request, res: Response) => {
+  res.send(`Welcome ${req.session.author!.name}`)
+})
 
 /*
     A route definition. The app.get() method specifies a callback function that will be invoked whenever there is an
@@ -65,8 +78,30 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-app.get('/message', (req: Request, res: Response) => {
+app.post('/login', (req: Request, res: Response, next: NextFunction) => {
   console.log(req.session)
+  console.log(req)
+
+  req.session.regenerate((err) => {
+    if (err) {
+      console.error(err)
+      next(err)
+    }
+
+    req.session.author = req.body.author
+
+    req.session.save((err) => {
+      if (err) {
+        console.error(err)
+        next(err)
+      }
+      res.json({message: 'Login successful', success: true, cookie: req.session.cookie})
+    })
+  })
+})
+
+app.get('/message', (req: Request, res: Response) => {
+  console.log(req.session.message)
   res.json({message: 'Hello from server!', success: true})
 })
 

@@ -12,3 +12,7 @@ export type TDocument = {
 	author_id?: string
 	author?: TAuthor
 }
+
+export type TCookie = {
+	[key: string]: string
+}
