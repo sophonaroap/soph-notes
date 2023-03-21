@@ -56,18 +56,21 @@ app.use(
 )
 
 // Middleware to see if a user is authenticated
-const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   if (req.session?.author) {
+    console.log(`User ${req.session.author.name} is authenticated`)
     next()
   }
   else {
+    console.log(`User is not authenticated`)
+    console.log(`Session Cookie: ${JSON.stringify(req.session)}`)
     next('route')
   }
-}
-
-app.get('/', isAuthenticated, (req: Request, res: Response) => {
-  res.send(`Welcome ${req.session.author!.name}`)
 })
+
+// app.get('/', isAuthenticated, (req: Request, res: Response) => {
+//   res.send(`Welcome ${req.session.author!.name}`)
+// })
 
 /*
     A route definition. The app.get() method specifies a callback function that will be invoked whenever there is an
@@ -79,8 +82,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/login', (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.session)
-  console.log(req)
 
   req.session.regenerate((err) => {
     if (err) {
@@ -89,6 +90,7 @@ app.post('/login', (req: Request, res: Response, next: NextFunction) => {
     }
 
     req.session.author = req.body.author
+    console.log(req.session.author)
 
     req.session.save((err) => {
       if (err) {
