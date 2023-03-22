@@ -1,6 +1,6 @@
-import {FormControl, FormLabel} from "@chakra-ui/react";
-import InputComponent from "../../atoms/InputComponent";
-import {TEmailInputProps} from "../types";
+import {FormControl, FormLabel} from "@chakra-ui/react"
+import InputComponent from "../../atoms/InputComponent"
+import {TEmailInputProps} from "../types"
 
 export default function EmailInput(props: TEmailInputProps): JSX.Element {
 	return (
