@@ -1,7 +1,7 @@
-import {ChangeEvent, useState} from "react";
-import {FormControl} from "@chakra-ui/react";
-import EmailInput from "../../molecules/EmailInput";
-import PasswordInput from "../../molecules/PasswordInput";
+import {ChangeEvent, useState} from 'react'
+import {FormControl} from '@chakra-ui/react'
+import EmailInput from '../../molecules/EmailInput'
+import PasswordInput from '../../molecules/PasswordInput'
 
 export default function LoginForm(props: any): JSX.Element {
 	const [email, setEmail] = useState('')
@@ -37,10 +37,10 @@ export default function LoginForm(props: any): JSX.Element {
 		onChange: handlePasswordChange
 	}
 
-		return (
-	<FormControl>
-		<EmailInput {...emailInputProps}/>
-		<PasswordInput {...passwordInputProps}/>
-	</FormControl>
+	return (
+		<FormControl>
+			<EmailInput {...emailInputProps}/>
+			<PasswordInput {...passwordInputProps}/>
+		</FormControl>
 	)
 }

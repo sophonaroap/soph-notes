@@ -1,8 +1,8 @@
-import {useState} from "react";
-import {FormControl, FormLabel, IconButton, InputGroup, InputRightElement} from "@chakra-ui/react";
-import InputComponent from "../../atoms/InputComponent";
-import {TPasswordInputProps} from "../types";
-import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
+import {useState} from 'react'
+import {FormControl, FormLabel, IconButton, InputGroup, InputRightElement} from '@chakra-ui/react'
+import InputComponent from '../../atoms/InputComponent'
+import {TPasswordInputProps} from '../types'
+import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons'
 
 export default function PasswordInput(props: TPasswordInputProps): JSX.Element {
 	const [showPassword, setShowPassword] = useState<boolean>(props.showPassword || false)
@@ -18,14 +18,14 @@ export default function PasswordInput(props: TPasswordInputProps): JSX.Element {
 		props.inputProps!['type'] = 'text'
 		inputRightElement = (
 			<InputRightElement>
-				<IconButton aria-label="hide password" icon={<ViewOffIcon/>} onClick={onClickShowPassword}/>
+				<IconButton aria-label='hide password' icon={<ViewOffIcon/>} onClick={onClickShowPassword}/>
 			</InputRightElement>
 		)
 	} else {
 		props.inputProps!['type'] = 'password'
 		inputRightElement = (
 			<InputRightElement>
-				<IconButton aria-label="show password" icon={<ViewIcon/>} onClick={onClickShowPassword}/>
+				<IconButton aria-label='show password' icon={<ViewIcon/>} onClick={onClickShowPassword}/>
 			</InputRightElement>
 		)
 	}

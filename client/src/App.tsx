@@ -1,9 +1,9 @@
 import {ChangeEvent, useState} from 'react'
 import './App.css'
-import {Box, Button, HStack, Input, Textarea} from "@chakra-ui/react";
-import {PostDocument, PostLogin} from "./api/document";
-import {TDocument} from "./types";
-import LoginForm from "./components/organisms/LoginForm";
+import {Box, Button, HStack, Input, Textarea} from '@chakra-ui/react'
+import {PostDocument, PostLogin} from './api/document'
+import {TDocument} from './types'
+import LoginForm from './components/organisms/LoginForm'
 
 const test_author = {
 	email: 'test_email@email.com',
@@ -95,7 +95,7 @@ function App(): JSX.Element {
 	)
 
 	let textInput = (
-		<Textarea size='lg' placeholder="Enter text here" value={text} onChange={handleTextChange}/>
+		<Textarea size='lg' placeholder='Enter text here' value={text} onChange={handleTextChange}/>
 	)
 
 	let submitButton = (
@@ -107,7 +107,7 @@ function App(): JSX.Element {
 	)
 
 	return (
-		<Box className="App">
+		<Box className='App'>
 			{loginBar}
 			{titleInput}
 			{textInput}

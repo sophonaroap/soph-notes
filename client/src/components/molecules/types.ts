@@ -1,6 +1,6 @@
-import {FormControlProps} from "@chakra-ui/react";
-import {ChangeEventHandler} from "react";
-import {TInputComponentProps} from "../atoms/types";
+import {FormControlProps} from '@chakra-ui/react'
+import {ChangeEventHandler} from 'react'
+import {TInputComponentProps} from '../atoms/types'
 
 export type TEmailInputProps = {
 	formControlProps?: FormControlProps

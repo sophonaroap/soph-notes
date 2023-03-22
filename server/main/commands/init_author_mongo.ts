@@ -1,7 +1,7 @@
-import {Prisma, PrismaClient} from "@prisma/client";
+import {Prisma, PrismaClient} from '@prisma/client'
 
 async function init_author_mongo() {
-	console.log('Initializing dev mongo');
+	console.log('Initializing dev mongo')
 
 	const prisma_client = new PrismaClient()
 
@@ -9,6 +9,7 @@ async function init_author_mongo() {
 	const initialUser: Prisma.AuthorCreateInput = {
 		email: 'test_email@email.com',
 		name: 'Test User',
+		password: 'test_password',
 	}
 
 	const returnedInitialUser = await prisma_client.author.upsert({
