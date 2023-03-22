@@ -13,7 +13,7 @@ export type TPasswordInputProps = {
 	formControlProps?: FormControlProps
 	inputProps?: TInputComponentProps
 	initialValue?: string
-	onChangePassword: ChangeEventHandler<HTMLInputElement>
+	onChange: ChangeEventHandler<HTMLInputElement>
 	showPassword?: boolean
 	onClickShowPassword?: () => void
 }
