@@ -1,4 +1,9 @@
 export const InputComponent = {
+	baseStyle: {
+		field: {
+			color: 'red.500',
+		},
+	},
 	variants: {
 		login: {
 			addon: {
