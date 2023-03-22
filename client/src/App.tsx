@@ -3,6 +3,7 @@ import './App.css'
 import {Box, Button, HStack, Input, Textarea} from "@chakra-ui/react";
 import {PostDocument, PostLogin} from "./api/document";
 import {TDocument} from "./types";
+import LoginForm from "./components/organisms/LoginForm";
 
 const test_author = {
 	email: 'test_email@email.com',
@@ -101,12 +102,17 @@ function App(): JSX.Element {
 		<Button onClick={submitText}>Submit</Button>
 	)
 
+	let loginForm = (
+		<LoginForm/>
+	)
+
 	return (
 		<Box className="App">
 			{loginBar}
 			{titleInput}
 			{textInput}
 			{submitButton}
+			{loginForm}
 		</Box>
 	)
 }
