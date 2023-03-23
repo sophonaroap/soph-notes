@@ -9,7 +9,6 @@ export const styles: TStyles = {
 		body: {
 			bg: 'dark_shade.800',
 			height: '100vh',
-			color: 'light_shade.100',
 		},
 	},
 }
